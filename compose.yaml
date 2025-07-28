@@ -3,7 +3,7 @@ services:
     build:
       context: ./
       dockerfile: docker/app/Dockerfile
-    container_name: crm-whatsapp
+    container_name: facebook-leads-app
     tty: true
     env_file:
       - ./.env
@@ -13,60 +13,60 @@ services:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
     networks:
-      - crm-whatsapp-networks
+      - facebook-leads-networks
   
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: crm-whatsapp-rabbit
+    container_name: facebook-leads-rabbit
     restart: always
     tty: true
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASSWORD}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASSWORD}
     ports:
     #   - 5672:5672
-      - 15673:15672
+      - 15674:15672
     #   - 5552:5552
     volumes:
-      - crm-whatsapp-rabbit-data:/var/lib/rabbitmq/mnesia
-      - crm-whatsapp-rabbit-conf:/etc/rabbitmq
+      - facebook-leads-rabbit-data:/var/lib/rabbitmq/mnesia
+      - facebook-leads-rabbit-conf:/etc/rabbitmq
     networks:
-      - crm-whatsapp-networks
-  
-  phpmyadmin:
-    image: phpmyadmin:5.2
-    container_name: crm-whatsapp-phpmyadmin
-    restart: always
-    ports:
-      - 9000:80
-    environment:
-      PMA_HOST: crm-whatsapp-db
-    depends_on:
-      - mysql
-    networks:
-      - crm-whatsapp-networks
+      - facebook-leads-networks
   
   mysql:
     image: mysql:8.0
     restart: always
-    container_name: crm-whatsapp-db
+    container_name: facebook-leads-db
     environment:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_USER=${DB_USERNAME}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - crm-whatsapp-db:/var/lib/mysql
-      - crm-whatsapp-db-conf:/docker-entrypoint-initdb.d/init.sql
+      - facebook-leads-db:/var/lib/mysql
+      - facebook-leads-db-conf:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - crm-whatsapp-networks
+      - facebook-leads-networks
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: facebook-leads-phpmyadmin
+    restart: always
+    ports:
+      - 9000:80
+    environment:
+      - PMA_HOST=facebook-leads-db
+    depends_on:
+      - mysql
+    networks:
+      - facebook-leads-networks
 
 networks:
-  crm-whatsapp-networks:
+  facebook-leads-networks:
     driver: bridge
 
 volumes:
-  crm-whatsapp-db:
-  crm-whatsapp-db-conf:
-  crm-whatsapp-rabbit-conf:
-  crm-whatsapp-rabbit-data:
+  facebook-leads-db:
+  facebook-leads-db-conf:
+  facebook-leads-rabbit-conf:
+  facebook-leads-rabbit-data:
