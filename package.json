@@ -1,0 +1,33 @@
+{
+  "name": "facebook-leads",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start:dev": "tsx --trace-warnings --watch --env-file=.env src/index.ts",
+    "build:prod": "node --env-file=.env dist/index.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "Delcio Capolo <delciocapolo096@gmail.com>",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "amqp-connection-manager": "^4.1.14",
+    "cors": "^2.8.5",
+    "date-fns-tz": "^3.2.0",
+    "express": "^5.1.0",
+    "pino": "^9.7.0",
+    "socket.io": "^4.8.1",
+    "tsx": "^4.20.3",
+    "zod": "^4.0.10"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.1.0"
+  }
+}

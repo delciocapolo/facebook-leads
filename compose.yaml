@@ -1,0 +1,72 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: docker/app/Dockerfile
+    container_name: crm-whatsapp
+    tty: true
+    env_file:
+      - ./.env
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - crm-whatsapp-networks
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: crm-whatsapp-rabbit
+    restart: always
+    tty: true
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASSWORD}
+    ports:
+    #   - 5672:5672
+      - 15673:15672
+    #   - 5552:5552
+    volumes:
+      - crm-whatsapp-rabbit-data:/var/lib/rabbitmq/mnesia
+      - crm-whatsapp-rabbit-conf:/etc/rabbitmq
+    networks:
+      - crm-whatsapp-networks
+  
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: crm-whatsapp-phpmyadmin
+    restart: always
+    ports:
+      - 9000:80
+    environment:
+      PMA_HOST: crm-whatsapp-db
+    depends_on:
+      - mysql
+    networks:
+      - crm-whatsapp-networks
+  
+  mysql:
+    image: mysql:8.0
+    restart: always
+    container_name: crm-whatsapp-db
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - crm-whatsapp-db:/var/lib/mysql
+      - crm-whatsapp-db-conf:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - crm-whatsapp-networks
+
+networks:
+  crm-whatsapp-networks:
+    driver: bridge
+
+volumes:
+  crm-whatsapp-db:
+  crm-whatsapp-db-conf:
+  crm-whatsapp-rabbit-conf:
+  crm-whatsapp-rabbit-data:
