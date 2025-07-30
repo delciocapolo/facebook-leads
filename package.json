@@ -4,8 +4,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "build:prod": "node --env-file=.env dist/index.js",
     "start:dev": "tsx --trace-warnings --watch --env-file=.env src/index.ts",
-    "build:prod": "node --env-file=.env dist/index.js"
+    "start:prod": "npm run build && npm run build:prod"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -20,7 +21,9 @@
     "cors": "^2.8.5",
     "date-fns-tz": "^3.2.0",
     "express": "^5.1.0",
+    "mysql2": "^3.14.3",
     "pino": "^9.7.0",
+    "sequelize": "^6.37.7",
     "socket.io": "^4.8.1",
     "tsx": "^4.20.3",
     "zod": "^4.0.10"
@@ -28,6 +31,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
-    "@types/node": "^24.1.0"
+    "@types/node": "^24.1.0",
+    "typescript": "^5.8.3"
   }
 }

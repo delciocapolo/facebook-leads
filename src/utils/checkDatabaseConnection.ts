@@ -13,14 +13,14 @@ export async function databaseHeathy(options: ConnectionOptions = {}): Promise<b
 
    while (attempt <= maxRetries) {
       try {
-         await dbConnection.connection.$queryRaw`SELECT 1`;
+         await dbConnection.connection.query(`SELECT 1`);
 
          Logger.publishTo({
             level: 'info',
             context: 'database',
             args: [
                { message: `Database connection successful on attempt ${attempt}` },
-               'checkDatabaseConnection'
+               'databaseHeathy'
             ],
          });
          return true;
@@ -28,10 +28,10 @@ export async function databaseHeathy(options: ConnectionOptions = {}): Promise<b
          Logger.error({
             error: error,
             message: `Database connection failed (Attempt ${attempt}/${maxRetries})`
-         }, 'checkDatabaseConnection');
+         }, 'databaseHeathy');
 
          if (attempt === maxRetries) {
-            Logger.error({ message: "Maximum connection attempts reached. Aborting..." }, 'checkDatabaseConnection');
+            Logger.error({ message: "Maximum connection attempts reached. Aborting..." }, 'databaseHeathy');
             return false;
          }
 

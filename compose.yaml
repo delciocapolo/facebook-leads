@@ -1,8 +1,12 @@
+name: facebook_leads
+
 services:
   app:
     build:
       context: ./
       dockerfile: docker/app/Dockerfile
+      platforms:
+        - "linux/amd64"
     container_name: facebook-leads-app
     tty: true
     env_file:
@@ -53,7 +57,7 @@ services:
     container_name: facebook-leads-phpmyadmin
     restart: always
     ports:
-      - 9000:80
+      - 9001:80
     environment:
       - PMA_HOST=facebook-leads-db
     depends_on:

@@ -1,5 +1,7 @@
+import dbConnection from "./config/database-connection";
 import Env from "./config/environment-variable";
 import { Logger } from "./config/logger";
+import rabbitConnection from "./config/rabbit-connection";
 import { server } from "./services/server";
 import { resolveSequencialPromises } from "./utils";
 import { databaseHeathy } from "./utils/checkDatabaseConnection";
@@ -14,7 +16,10 @@ async function bootstrap() {
          });
       });
 
-      resolveSequencialPromises();
+      resolveSequencialPromises(
+         () => dbConnection.connect(),
+         () => rabbitConnection.connect(),
+      );
 
       setInterval(async () => {
          try {

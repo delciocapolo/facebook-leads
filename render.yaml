@@ -1,0 +1,72 @@
+previews:
+  generation: automatic
+
+services:
+  - type: web
+    runtime: docker
+    name: facebook-api
+    image:
+      url: delciocapolo/facebook_leads:v1.0
+    plan: free
+    envVars:
+      - key: DB_HOST
+        value: facebook-mysql
+      - key: DB_PORT
+        value: 3306
+      - key: NODE_ENV
+        value: production
+      - key: SERVER_HOST
+        value: 0.0.0.0
+      - key: SERVER_PORT
+        value: 3331
+      - key: RABBITMQ_HOST
+        value: rabbitmq
+      - key: RABBITMQ_DEFAULT_USER
+        value: guest
+      - key: RABBITMQ_DEFAULT_PASSWORD
+        value: guest
+      - key: RABBITMQ_PORT
+        value: 5672
+      - key: RABBITMQ_QUEUE
+        value: facebook_leads
+      - key: DB_USERNAME
+        value: fb
+      - key: DB_PASSWORD
+        value: root
+      - key: DB_NAME
+        value: facebook_leads
+      - key: TIMEZONE
+        value: "Africa/Luanda"
+
+  - type: pserv
+    runtime: docker
+    name: facebook-mysql
+    repo: https://github.com/render-examples/mysql
+    disk:
+      name: mysql
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+    envVars:
+      - key: MYSQL_DATABASE
+        value: facebook_leads
+      - key: MYSQL_USER
+        value: fb
+      - key: MYSQL_PASSWORD
+        value: root
+      - key: MYSQL_ROOT_PASSWORD
+        value: root
+
+  - type: pserv
+    runtime: docker
+    name: facebook-rabbitmq
+    image:
+      url: rabbitmq/3-management
+    disk:
+      name: rabbit-data
+      mountPath: /var/lib/rabbitmq/mnesia
+      sizeGB: 1
+    envVars:
+      - key: RABBITMQ_DEFAULT_USER
+        value: guest
+      - key: RABBITMQ_DEFAULT_PASS
+        value: guest

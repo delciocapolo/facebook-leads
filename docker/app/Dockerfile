@@ -24,6 +24,6 @@ FROM build AS production
 COPY --chown=${USER}:${USER} ./package*.json ./
 COPY --chown=${USER}:${USER} --from=build /usr/src/app/dist .
 COPY --chown=${USER}:${USER} --from=dependencies /usr/src/app/node_modules ./node_modules
-EXPOSE ${SERVER_PORT}
 
+EXPOSE 3331
 ENTRYPOINT [ "./docker/app/entrypoint.sh" ]

@@ -24,7 +24,8 @@ const environmentVariableSchema = z.object({
 })
     .transform((env) => ({
         ...env,
-        RABBITMQ_URI: `amqp://${env.RABBITMQ_DEFAULT_USER}:${env.RABBITMQ_DEFAULT_PASSWORD}@${env.RABBITMQ_HOST}:${env.RABBITMQ_PORT}`
+        RABBITMQ_URI: `amqp://${env.RABBITMQ_DEFAULT_USER}:${env.RABBITMQ_DEFAULT_PASSWORD}@${env.RABBITMQ_HOST}:${env.RABBITMQ_PORT}`,
+        DATABASE_URI: `mysql://${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`,
     }));
 
 const schemaValidate = environmentVariableSchema.safeParse(process.env);
