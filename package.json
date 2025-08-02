@@ -3,15 +3,14 @@
   "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
+    "check": "tsc --noEmit",
     "build": "tsc",
-    "build:prod": "node --env-file=.env dist/index.js",
     "start:dev": "tsx --trace-warnings --watch --env-file=.env src/index.ts",
-    "start:prod": "npm run build && npm run build:prod"
+    "start": "node --env-file=.env dist/index.js"
   },
   "engines": {
     "node": ">=22.0.0"
   },
-  "type": "module",
   "keywords": [],
   "author": "Delcio Capolo <delciocapolo096@gmail.com>",
   "license": "MIT",
@@ -22,6 +21,7 @@
     "date-fns-tz": "^3.2.0",
     "express": "^5.1.0",
     "mysql2": "^3.14.3",
+    "pg-hstore": "^2.3.4",
     "pino": "^9.7.0",
     "sequelize": "^6.37.7",
     "socket.io": "^4.8.1",
@@ -32,6 +32,9 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.1.0",
-    "typescript": "^5.8.3"
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.101.0",
+    "webpack-cli": "^6.0.1"
   }
 }
