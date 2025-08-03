@@ -3,17 +3,18 @@ name: facebook_leads
 services:
   app:
     build:
-      context: ./
-      dockerfile: docker/app/Dockerfile
+      context: ./app
+      dockerfile: Dockerfile
+      platforms:
+        - "linux/amd64"
     container_name: facebook-leads-app
     tty: true
     env_file:
-      - ./.env
+      - .env
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
-      - ./:/usr/src/app
-      - /usr/src/app/node_modules
+      - facebook-leads-node_modules:/usr/src/app/node_modules
     networks:
       - facebook-leads-networks
   
@@ -72,3 +73,4 @@ volumes:
   facebook-leads-db-conf:
   facebook-leads-rabbit-conf:
   facebook-leads-rabbit-data:
+  facebook-leads-node_modules:

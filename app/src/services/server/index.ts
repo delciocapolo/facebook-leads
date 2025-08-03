@@ -26,6 +26,12 @@ io.on('connection', (socket) => {
    socket.join(socketId);
 });
 
+app.all('*', (req, res) => {
+   return res
+      .status(404)
+      .json({ message: `Route not found ${req.originalUrl}` });
+});
+
 export {
    server,
    app,

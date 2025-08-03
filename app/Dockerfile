@@ -1,7 +1,7 @@
 ARG NODE_VERSION=22
 
 # STAGE 1: BASE
-FROM node:${NODE_VERSION} AS base
+FROM --platform=linux/amd64 node:${NODE_VERSION} AS base
 ARG USER=node
 WORKDIR /usr/src/app
 RUN mkdir -p /usr/src/app && chown ${USER}:${USER} /usr/src/app
@@ -9,7 +9,7 @@ USER ${USER}
 
 # STAGE 2: DEPENDENCIES
 FROM base AS dependencies
-COPY --chown=${USER}:${USER} ./package*.json ./
+COPY --chown=${USER}:${USER} package*.json .
 RUN npm ci --omit=dev
 
 # STAGE 3: DEV_DEPENDENCIES
@@ -27,6 +27,7 @@ FROM base AS production
 COPY --chown=${USER}:${USER} --from=dependencies /usr/src/app/node_modules ./node_modules
 COPY --chown=${USER}:${USER} --from=build /usr/src/app/dist ./dist
 COPY --chown=${USER}:${USER} ./package.json ./
+COPY --chown=${USER}:${USER} ./entrypoint ./
 
 EXPOSE 3331
-ENTRYPOINT [ "./docker/app/entrypoint.sh" ]
+ENTRYPOINT ["./entrypoint"]
